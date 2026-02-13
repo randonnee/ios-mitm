@@ -14,6 +14,12 @@ final class AppRunner {
         logger = Logger(label: "app")
         logger.info("Starting ios-mitm")
 
+        let caLogger = Logger(label: "ca")
+        let caStore = CertificateStore(path: config.caDirectory)
+        let certificateAuthority = CertificateAuthority(store: caStore, logger: caLogger)
+        _ = try certificateAuthority.ensureRoot()
+        logger.info("Root CA ready at \(config.caDirectory)")
+
         let registry = DeviceRegistry(logger: Logger(label: "devices"))
         registry.seedSampleDevices()
         let sessionManager = SessionManager(registry: registry, logger: Logger(label: "sessions"))

@@ -20,13 +20,17 @@ struct RunCommand: ParsableCommand {
     @Option(name: .long, help: "Simulator discovery poll interval in seconds")
     var pollInterval: Double?
 
+    @Option(name: .long, help: "Directory for storing generated CA certificates")
+    var caDirectory: String?
+
     func run() throws {
         var configuration = try AppConfigLoader.load(from: config)
         configuration.apply(overrides: .init(
             proxyPort: proxyPort,
             apiPort: apiPort,
             logLevel: logLevel,
-            pollInterval: pollInterval
+            pollInterval: pollInterval,
+            caDirectory: caDirectory
         ))
 
         let runner = AppRunner(config: configuration)
